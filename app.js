@@ -265,4 +265,35 @@ const game = () => {
     playMatch();
 };
 
+
 game();
+
+
+// ---------------------------
+// Dark / Light Mode Toggle
+// ---------------------------
+const themeToggle = document.getElementById("theme-toggle");
+
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme) {
+    document.body.classList.add(savedTheme);
+} else {
+    document.body.classList.add("light-mode");
+}
+
+themeToggle.addEventListener("click", () => {
+
+    if (document.body.classList.contains("light-mode")) {
+        document.body.classList.remove("light-mode");
+        document.body.classList.add("dark-mode");
+        themeToggle.textContent = "☀️ Light Mode";
+        localStorage.setItem("theme", "dark-mode");
+    } else {
+        document.body.classList.remove("dark-mode");
+        document.body.classList.add("light-mode");
+        themeToggle.textContent = "🌙 Dark Mode";
+        localStorage.setItem("theme", "light-mode");
+    }
+
+});
