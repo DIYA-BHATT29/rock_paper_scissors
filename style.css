@@ -19,4 +19,30 @@
 	50% { transform: scaleX(-1) rotate(10deg); }
 	75% { transform: scaleX(-1) rotate(-10deg); }
 	100% { transform: scaleX(-1) rotate(0deg); }
+
+}
+/* Light Mode (default) */
+body.light-mode {
+    background-color: #f9fafb;
+    color: #0c4a6e;
+}
+
+/* Dark Mode */
+body.dark-mode {
+    background-color: #0f172a;
+    color: #e2e8f0;
+}
+
+/* Panels */
+body.dark-mode .score,
+body.dark-mode .intro,
+body.dark-mode .popup-content,
+body.dark-mode #image-picker-modal > div {
+    background-color: #1e293b !important;
+    color: #e2e8f0;
+}
+
+/* Buttons */
+body.dark-mode button {
+    filter: brightness(0.9);
 }
