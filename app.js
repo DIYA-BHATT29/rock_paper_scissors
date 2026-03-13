@@ -65,6 +65,9 @@ const game = () => {
     const winnerDisplay = document.querySelector('.winner');
     const playerScoreDisplay = document.querySelector('.player-score p');
     const computerScoreDisplay = document.querySelector('.computer-score p');
+    const playerBar = document.getElementById("player-bar");
+    const computerBar = document.getElementById("computer-bar");
+
     let isClickable = true;
     let isPaused = false;
     const pauseBtn = document.getElementById("pause-btn");
@@ -89,6 +92,10 @@ const game = () => {
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
         });
+
+        winnerDisplay.textContent = "Choose your hand!";
+    }
+
 
         winnerDisplay.textContent = "Choose your hand!";
     }
@@ -240,9 +247,16 @@ const game = () => {
     };
 
     const updateScore = () => {
-        playerScoreDisplay.textContent = playerScore;
-        computerScoreDisplay.textContent = computerScore;
-    };
+
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+
+    const playerProgress = (playerScore / maxRounds) * 100;
+    const computerProgress = (computerScore / maxRounds) * 100;
+
+    playerBar.style.width = playerProgress + "%";
+    computerBar.style.width = computerProgress + "%";
+};
 
     const compareHands = (playerChoice, computerChoice) => {
         if (playerChoice === computerChoice) {
@@ -250,6 +264,16 @@ const game = () => {
     addHistory(roundsPlayed + 1, playerChoice, computerChoice, "Tie");
     return;
 }
+
+      const wins = {
+    rock: 'scissors',
+    paper: 'rock',
+    scissors: 'paper'
+};
+
+
+if(wins[playerChoice] === computerChoice){
+
 
       const wins = {
     rock: 'scissors',
@@ -298,6 +322,11 @@ updateScore();
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed', 'grayscale');
         });
+       gameHistory.length = 0;
+historyList.innerHTML = "";
+
+playerBar.style.width = "0%";
+computerBar.style.width = "0%";;
         playerHistory.length = 0;
 updateScore();
 
