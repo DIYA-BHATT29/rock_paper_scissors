@@ -1,7 +1,7 @@
 const game = () => {
     let playerScore = 0;
     let computerScore = 0;
-    let roundsPlayed = 0; // fixed
+    let roundsPlayed = 0; 
     const maxRounds = 10;
     const playerHistory = [];
     const computerOptions = ['rock', 'paper', 'scissors'];
@@ -92,6 +92,10 @@ const game = () => {
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed');
         });
+
+        winnerDisplay.textContent = "Choose your hand!";
+    }
+
 
         winnerDisplay.textContent = "Choose your hand!";
     }
@@ -270,6 +274,16 @@ const game = () => {
 
 if(wins[playerChoice] === computerChoice){
 
+
+      const wins = {
+    rock: 'scissors',
+    paper: 'rock',
+    scissors: 'paper'
+};
+
+
+if(wins[playerChoice] === computerChoice){
+
 winnerDisplay.textContent = "Player Wins!";
 playerScore++;
 
@@ -313,6 +327,7 @@ historyList.innerHTML = "";
 
 playerBar.style.width = "0%";
 computerBar.style.width = "0%";;
+        playerHistory.length = 0;
 updateScore();
 
 // Clear game history
