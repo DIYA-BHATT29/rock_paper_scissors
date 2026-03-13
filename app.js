@@ -1,9 +1,12 @@
+```javascript
 const game = () => {
 
     let playerScore = 0;
     let computerScore = 0;
     let roundsPlayed = 0;
-    const maxRounds = 10;
+
+    // Best Of Mode
+    let maxRounds = 10;
 
     const playerHistory = [];
     const computerOptions = ['rock','paper','scissors'];
@@ -153,8 +156,6 @@ const game = () => {
     finalResultContainer.appendChild(restartButton);
 
     const shakeSound = new Audio('./sounds/whoosh.mp3');
-    const winSound = new Audio('./sounds/win.mp3');
-    const loseSound = new Audio('./sounds/lose.mp3');
 
     ['rock_hand.png','paper_hand.png','scissors_hand.png']
     .forEach(img=> new Image().src=`./images/${img}`);
@@ -165,7 +166,14 @@ const game = () => {
         scissors:'./images/scissors_hand.png'
     };
 
-    playBtn.addEventListener('click',()=>{
+    // START GAME + BEST OF MODE
+    playBtn.addEventListener('click', () => {
+
+        const bestOfSelect = document.getElementById("best-of-select");
+
+        if(bestOfSelect){
+            maxRounds = parseInt(bestOfSelect.value);
+        }
 
         if(musicEnabled){
             startSound.play();
@@ -197,6 +205,7 @@ const game = () => {
 
                 playerHand.style.animation='none';
                 computerHand.style.animation='none';
+
                 void playerHand.offsetWidth;
                 void computerHand.offsetWidth;
 
@@ -408,3 +417,4 @@ themeToggle.addEventListener("click",()=>{
         localStorage.setItem("theme","light-mode");
     }
 });
+```
