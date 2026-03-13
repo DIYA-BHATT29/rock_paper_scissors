@@ -53,16 +53,27 @@
         </div>
 
         <div class="match hidden flex-col items-center justify-center">
-            <h2 class="winner text-4xl font-bold mb-8 text-center text-pink-500">Choose your hand!</h2>
-            <div class="hands flex justify-center space-x-16">
-                <img src="./images/rock_hand.png" alt="Player's Hand" class="player-hand w-52 h-52">
-                <img src="./images/rock_hand.png" alt="Computer's Hand" class="computer-hand w-52 h-52 transform scale-x-[-1]">
-            </div>
-            <div class="options flex justify-center space-x-8 mt-10">
-                <button class="rock bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Rock</button>
-                <button class="paper bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Paper</button>
-                <button class="scissors bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Scissors</button>
-            </div>
+
+    <h2 class="winner text-4xl font-bold mb-8 text-center text-pink-500">
+        Choose your hand!
+    </h2>
+
+    <!-- Countdown -->
+    <div id="countdown"
+    class="hidden text-6xl font-extrabold text-pink-500 text-center mb-6">
+    </div>
+
+    <!-- Hands -->
+    <div class="hands flex justify-center space-x-16">
+        <img src="./images/rock_hand.png" alt="Player's Hand" class="player-hand w-52 h-52">
+        <img src="./images/rock_hand.png" alt="Computer's Hand" class="computer-hand w-52 h-52 transform scale-x-[-1]">
+    </div>
+
+    <div class="options flex justify-center space-x-8 mt-10">
+        <button class="rock bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Rock</button>
+        <button class="paper bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Paper</button>
+        <button class="scissors bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg shadow-md transition duration-300">Scissors</button>
+    </div>
             <div class="flex justify-center mt-6">
     <button id="pause-btn"
         class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-6 rounded-full text-sm shadow transition duration-300">
