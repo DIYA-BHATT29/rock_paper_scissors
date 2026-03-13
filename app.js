@@ -1,7 +1,7 @@
 const game = () => {
     let playerScore = 0;
     let computerScore = 0;
-    let roundsPlayed = 0; 
+    let roundsPlayed = 0; // fixed
     const maxRounds = 10;
     const playerHistory = [];
     const computerOptions = ['rock', 'paper', 'scissors'];
@@ -96,10 +96,6 @@ const game = () => {
         winnerDisplay.textContent = "Choose your hand!";
     }
 
-
-        winnerDisplay.textContent = "Choose your hand!";
-    }
-
 });
     
     // Final results container
@@ -189,11 +185,17 @@ const game = () => {
 
     // Start game
     playBtn.addEventListener('click', () => {
-        introScreen.classList.add('hidden');
-        match.classList.remove('hidden');
-        match.classList.add('flex');
-    });
 
+    // Play start sound if music is enabled
+    if (musicEnabled) {
+        startSound.play();
+    }
+
+    introScreen.classList.add('hidden');
+    match.classList.remove('hidden');
+    match.classList.add('flex');
+
+});
     // Play match
     const playMatch = () => {
 
@@ -274,18 +276,12 @@ const game = () => {
 
 if(wins[playerChoice] === computerChoice){
 
-
-      const wins = {
-    rock: 'scissors',
-    paper: 'rock',
-    scissors: 'paper'
-};
-
-
-if(wins[playerChoice] === computerChoice){
-
 winnerDisplay.textContent = "Player Wins!";
 playerScore++;
+
+if(musicEnabled){
+    scoreSound.play();
+}
 
 addHistory(roundsPlayed+1,playerChoice,computerChoice,"Player Win");
 
@@ -303,7 +299,14 @@ updateScore();
 
     const endGame = () => {
         let finalMessage = '';
-        if (playerScore > computerScore) finalMessage = 'You won the game! 🎉';
+        if(playerScore > bestScore){
+    bestScore = playerScore;
+    localStorage.setItem("bestScore", bestScore);
+
+    if(musicEnabled){
+        highScoreSound.play();
+    }
+}
         else if (computerScore > playerScore) finalMessage = 'Computer won the game. 😢';
         else finalMessage = 'The game is a tie! 🤝';
 
@@ -317,6 +320,10 @@ updateScore();
         playerScore = 0;
         computerScore = 0;
         roundsPlayed = 0;
+        // Track best score
+    let bestScore = localStorage.getItem("bestScore") || 0;
+
+    let isPaused = false;
         isClickable = true;
         options.forEach(btn => {
             btn.disabled = false;
@@ -327,7 +334,6 @@ historyList.innerHTML = "";
 
 playerBar.style.width = "0%";
 computerBar.style.width = "0%";;
-        playerHistory.length = 0;
 updateScore();
 
 // Clear game history
@@ -351,6 +357,45 @@ historyList.innerHTML = "";
 
 game();
 
+// ---------------------------
+// Background Music + Sounds
+// ---------------------------
+
+const bgMusic = new Audio("./sounds/background-music.mp3");
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
+
+const startSound = new Audio("./sounds/start.mp3");
+const scoreSound = new Audio("./sounds/score.mp3");
+const highScoreSound = new Audio("./sounds/highscore.mp3");
+
+const musicToggle = document.getElementById("music-toggle");
+
+// Load saved preference
+let musicEnabled = localStorage.getItem("musicEnabled") !== "false";
+
+if (musicEnabled) {
+    bgMusic.play().catch(()=>{});
+    musicToggle.textContent = "🔇 Music Off";
+} else {
+    musicToggle.textContent = "🎵 Music On";
+}
+
+musicToggle.addEventListener("click", () => {
+
+    musicEnabled = !musicEnabled;
+
+    if (musicEnabled) {
+        bgMusic.play();
+        musicToggle.textContent = "🔇 Music Off";
+    } else {
+        bgMusic.pause();
+        musicToggle.textContent = "🎵 Music On";
+    }
+
+    localStorage.setItem("musicEnabled", musicEnabled);
+
+});
 
 // ---------------------------
 // Dark / Light Mode Toggle
