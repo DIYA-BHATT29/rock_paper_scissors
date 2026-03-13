@@ -7,7 +7,8 @@ const game = () => {
     const computerOptions = ['rock', 'paper', 'scissors'];
     const counters = { rock: 'paper', paper: 'scissors', scissors: 'rock' };
     const getDifficulty = () => document.querySelector('input[name="difficulty"]:checked')?.value ?? 'medium';
-
+    const historyList = document.getElementById("history-list");
+    const gameHistory = [];
     const getComputerChoice = (playerChoice) => {
         const difficulty = getDifficulty();
         const getRandomMove = () => computerOptions[Math.floor(Math.random() * 3)];
@@ -40,6 +41,19 @@ const game = () => {
         const losingMoves = { rock: 'scissors', paper: 'rock', scissors: 'paper' };
         return losingMoves[predictedMove];
     };
+    const addHistory = (round, playerChoice, computerChoice, result) => {
+    const entry = `Round ${round}: Player (${playerChoice}) vs Computer (${computerChoice}) → ${result}`;
+
+    gameHistory.push(entry);
+
+    const li = document.createElement("li");
+    li.textContent = entry;
+    li.classList.add("border-b", "pb-1");
+
+    historyList.appendChild(li);
+
+    historyList.scrollTop = historyList.scrollHeight;
+};
 
     // DOM elements
     const playBtn = document.querySelector('.intro button');
@@ -51,8 +65,39 @@ const game = () => {
     const winnerDisplay = document.querySelector('.winner');
     const playerScoreDisplay = document.querySelector('.player-score p');
     const computerScoreDisplay = document.querySelector('.computer-score p');
-    let isClickable = true;
+    const playerBar = document.getElementById("player-bar");
+    const computerBar = document.getElementById("computer-bar");
 
+    let isClickable = true;
+    let isPaused = false;
+    const pauseBtn = document.getElementById("pause-btn");
+    pauseBtn.addEventListener("click", () => {
+
+    isPaused = !isPaused;
+
+    if (isPaused) {
+        pauseBtn.textContent = "▶ Resume";
+
+        options.forEach(btn => {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+        });
+
+        winnerDisplay.textContent = "Game Paused ⏸";
+
+    } else {
+        pauseBtn.textContent = "⏸ Pause";
+
+        options.forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+
+        winnerDisplay.textContent = "Choose your hand!";
+    }
+
+});
+    
     // Final results container
     const finalResultContainer = document.createElement('div');
     finalResultContainer.classList.add('text-center', 'mt-8', 'w-full');
@@ -150,7 +195,7 @@ const game = () => {
 
         options.forEach(option => {
             option.addEventListener('click', function() {
-                if (!isClickable || roundsPlayed >= maxRounds) return;
+                if (!isClickable || isPaused || roundsPlayed >= maxRounds) return;
 
                 isClickable = false;
                 options.forEach(btn => {
@@ -198,33 +243,48 @@ const game = () => {
     };
 
     const updateScore = () => {
-        playerScoreDisplay.textContent = playerScore;
-        computerScoreDisplay.textContent = computerScore;
-    };
+
+    playerScoreDisplay.textContent = playerScore;
+    computerScoreDisplay.textContent = computerScore;
+
+    const playerProgress = (playerScore / maxRounds) * 100;
+    const computerProgress = (computerScore / maxRounds) * 100;
+
+    playerBar.style.width = playerProgress + "%";
+    computerBar.style.width = computerProgress + "%";
+};
 
     const compareHands = (playerChoice, computerChoice) => {
         if (playerChoice === computerChoice) {
-            winnerDisplay.textContent = 'It is a tie';
-            return;
-        }
+    winnerDisplay.textContent = 'It is a tie';
+    addHistory(roundsPlayed + 1, playerChoice, computerChoice, "Tie");
+    return;
+}
 
-        const wins = {
-            rock: 'scissors',
-            paper: 'rock',
-            scissors: 'paper'
-        };
+      const wins = {
+    rock: 'scissors',
+    paper: 'rock',
+    scissors: 'paper'
+};
 
-        if (wins[playerChoice] === computerChoice) {
-            winnerDisplay.textContent = 'Player Wins!';
-            winSound.play();
-            playerScore++;
-        } else {
-            winnerDisplay.textContent = 'Computer Wins!';
-            loseSound.play();
-            computerScore++;
-        }
 
-        updateScore();
+if(wins[playerChoice] === computerChoice){
+
+winnerDisplay.textContent = "Player Wins!";
+playerScore++;
+
+addHistory(roundsPlayed+1,playerChoice,computerChoice,"Player Win");
+
+}else{
+
+winnerDisplay.textContent = "Computer Wins!";
+computerScore++;
+
+addHistory(roundsPlayed+1,playerChoice,computerChoice,"Computer Win");
+
+}
+
+updateScore();
     };
 
     const endGame = () => {
@@ -248,8 +308,16 @@ const game = () => {
             btn.disabled = false;
             btn.classList.remove('opacity-50', 'cursor-not-allowed', 'grayscale');
         });
-        playerHistory.length = 0;
-        updateScore();
+       gameHistory.length = 0;
+historyList.innerHTML = "";
+
+playerBar.style.width = "0%";
+computerBar.style.width = "0%";;
+updateScore();
+
+// Clear game history
+gameHistory.length = 0;
+historyList.innerHTML = "";
 
 
         winnerDisplay.classList.remove('hidden');
